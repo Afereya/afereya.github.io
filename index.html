@@ -1,49 +1,28 @@
 <!DOCTYPE html><html><head>
 <meta charset="UTF-8">
 <title>Afereya</title>	
+<link rel="shortcut icon" href="./favicon.ico">
 
-	<link rel="shortcut icon" href="./favicon.ico">
 
-<script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
-<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
-<div id="like_button_container"></div>
+<script src='./divLib.js'></script>
 <script>
+  	var self=this;
 	var trace = window.console.log.bind(window.console);
 
-	// function sizeWindow () {
-	// 	var w = document.documentElement.clientWidth;
-	// 	var h = document.documentElement.clientHeight;
-	// }
-
-	// const e = React.createElement;
-	// function init () {
-
-	// }
-
-	'use strict';
-	const e = React.createElement;
-
-	class LikeButton extends React.Component {
-	  constructor(props) {
-	    super(props);
-	    this.state = { liked: false };
-	  }
-
-	  render() {
-	    if (this.state.liked) {
-	      return 'You liked this.';
-	    }
-
-	    return e(
-	      'button',
-	      { onClick: () => this.setState({ liked: true }) },
-	      'Like'
-	    );
-	  }
+	function sizeWindow () {
+		var w = document.documentElement.clientWidth;
+		var h = document.documentElement.clientHeight;
 	}
 
-	const domContainer = document.querySelector('#like_button_container');
-	ReactDOM.render(e(LikeButton), domContainer);
+	function init () {
+		this.contentHTML= document.createElement('div');
+		this.contentHTML.style.position = 'fixed';
+		this.contentHTML.style.top = '0px';
+		this.contentHTML.style.left = '0px';
+		document.body.appendChild(this.contentHTML);  		
+
+	}
+
 </script>
 
 </head><body></body></html>
