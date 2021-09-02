@@ -8,9 +8,12 @@
 	var trace = window.console.log.bind(window.console);
 	var dcmParam;
 
+	var w,h;
 	function sizeWindow () {
-		var w = document.documentElement.clientWidth;
-		var h = document.documentElement.clientHeight;
+		w = document.documentElement.clientWidth;
+		h = document.documentElement.clientHeight;
+
+		componentResize()
 	}
 
 	function init () {
@@ -24,11 +27,19 @@
 		this.dCont = new DCont(this.contentHTML);
 
 		this.panelTop = new DPanel(this.dCont, 0, 0)
+		this.panelTop.height = 32
 		// this.panelThree = new DPanel(this.dCont, 0, 0)
 		// this.panelAbout = new DPanel(this.dCont, 0, 0)
 		// this.panelXz = new DPanel(this.dCont, 0, 0)
 
 		this.panelTop.color = '#00ff00'
+		sizeWindow()
+	}
+
+
+	function componentResize () {
+		if(!dcmParam) return
+		this.panelTop.width = w
 	}
 
 
