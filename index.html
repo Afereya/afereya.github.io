@@ -8,6 +8,7 @@
 <script>
   	var self=this;
 	var trace = window.console.log.bind(window.console);
+	var dcmParam;
 
 	function sizeWindow () {
 		var w = document.documentElement.clientWidth;
@@ -15,11 +16,14 @@
 	}
 
 	function init () {
+		dcmParam = new DCM();	
 		this.contentHTML= document.createElement('div');
 		this.contentHTML.style.position = 'fixed';
 		this.contentHTML.style.top = '0px';
 		this.contentHTML.style.left = '0px';
 		document.body.appendChild(this.contentHTML);  		
+
+		trace(dcmParam)
 
 	}
 
