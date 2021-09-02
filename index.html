@@ -16,6 +16,8 @@
 	function init () {
 		dcmParam = new DCM();	
 		this.contentHTML= document.createElement('div');
+		trace('11,', this.contentHTML)
+		trace('12,', self.contentHTML)
 		this.contentHTML.style.position = 'fixed';
 		this.contentHTML.style.top = '0px';
 		this.contentHTML.style.left = '0px';
@@ -23,7 +25,6 @@
 
 		trace(dcmParam)
 	}
-		trace('init', dcmParam)
 
 
 	document.addEventListener("DOMContentLoaded", function() {
