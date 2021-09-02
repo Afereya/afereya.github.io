@@ -16,14 +16,19 @@
 	function init () {
 		dcmParam = new DCM();	
 		this.contentHTML= document.createElement('div');
-		trace('11,', this.contentHTML)
-		trace('12,', self.contentHTML)
 		this.contentHTML.style.position = 'fixed';
 		this.contentHTML.style.top = '0px';
 		this.contentHTML.style.left = '0px';
-		document.body.appendChild(this.contentHTML);  		
+		document.body.appendChild(this.contentHTML);
 
-		trace(dcmParam)
+		this.dCont = new DCont(this.contentHTML);
+
+		this.panelTop = new DPanel(this.dCont, 0, 0)
+		// this.panelThree = new DPanel(this.dCont, 0, 0)
+		// this.panelAbout = new DPanel(this.dCont, 0, 0)
+		// this.panelXz = new DPanel(this.dCont, 0, 0)
+
+		this.panelTop.color = '#00ff00'
 	}
 
 
