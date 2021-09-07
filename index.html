@@ -3,45 +3,32 @@
 <title>Afereya</title>	
 <!-- <link rel="shortcut icon" href="./favicon.ico"> -->
 <script src='./divLib.js'></script>
-<script>
-  	var self=this;
-	var trace = window.console.log.bind(window.console);
+<script type="module">
+	import { Main } from './src/Main.js';
+
+	window.trace = window.console.log.bind(window.console);
+
 	var dcmParam;
 
-	var w,h;
-	function sizeWindow () {
-		w = document.documentElement.clientWidth;
-		h = document.documentElement.clientHeight;
 
-		componentResize()
+	var main
+	function sizeWindow () {
+		var w = document.documentElement.clientWidth;
+		var h = document.documentElement.clientHeight;
+
+		trace(main)
+		if (main != undefined) main.sizeWindow(w, h);		
 	}
 
 	function init () {
 		dcmParam = new DCM();	
-		this.contentHTML= document.createElement('div');
-		this.contentHTML.style.position = 'fixed';
-		this.contentHTML.style.top = '0px';
-		this.contentHTML.style.left = '0px';
-		document.body.appendChild(this.contentHTML);
 
-		this.dCont = new DCont(this.contentHTML);
-
-		this.panelTop = new DPanel(this.dCont, 0, 0)
-		this.panelTop.height = 32
-		// this.panelThree = new DPanel(this.dCont, 0, 0)
-		// this.panelAbout = new DPanel(this.dCont, 0, 0)
-		// this.panelXz = new DPanel(this.dCont, 0, 0)
-
-		this.panelTop.color = '#00ff00'
-		sizeWindow()
+		main = new Main(function(s, p){
+			if(s=="init"){
+			}
+		})				
+		sizeWindow()					
 	}
-
-
-	function componentResize () {
-		if(!dcmParam) return
-		this.panelTop.width = w
-	}
-
 
 	document.addEventListener("DOMContentLoaded", function() {
 		init();	

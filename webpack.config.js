@@ -4,10 +4,10 @@ const path = require('path');
 const webpack = require('webpack');
 const bodyParser = require('body-parser');
  let conf = {
-  	entry: './index.html',
+  	entry: './src/index.js',
   	output: {
     	path: path.resolve(__dirname, 'build'),
-		filename: 'index.html',
+		filename: 'afereya.js',
 		publicPath: 'build/'
   	},
   	devServer: {       
