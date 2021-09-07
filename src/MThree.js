@@ -30,17 +30,17 @@ export class MThree  {
 		let linesMesh;
 
 		const maxParticleCount = 1000;
-		let particleCount = 500;
-		const r = 800;
+		let particleCount = 800;
+		const r = 1500;
 		const rHalf = r / 2;
 
 		const effectController = {
 			showDots: true,
 			showLines: true,
-			minDistance: 120,
-			limitConnections: false,
-			maxConnections: 100,
-			particleCount: 1000
+			minDistance: 150,
+			limitConnections: true,
+			maxConnections: 10,
+			particleCount: 800
 		};
 
 		init();
@@ -54,7 +54,7 @@ export class MThree  {
 
 			camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 4000 );
 			// camera.position.z = 1750;
-			camera.position.z = 800;
+			camera.position.z = 1000;
 
 			// const controls = new OrbitControls( camera, container );
 			// controls.minDistance = 1000;
@@ -245,7 +245,7 @@ export class MThree  {
 
 			group.rotation.x = time * 0.1;
 			group.rotation.y = time * 0.1;
-			group.rotation.z = time * 0.1;
+			group.rotation.z = time * 0.2;
 
 			renderer.render( scene, camera );
 		}
