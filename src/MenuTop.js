@@ -1,7 +1,7 @@
-export class MTop  {
+export class MenuTop  {
   	constructor(par, fun) {  		
   		var self=this;
-  		this.type="Main";
+  		this.type="MenuTop";
   		this.par=par;
   		this.fun=fun;
 		this.dCont = new DCont(this.par.contentHTML);
@@ -13,12 +13,12 @@ export class MTop  {
 
 		this.panel = undefined;
   		this.init = function () {
-			this.panel = new DPanel(this.dCont, 0, 0)
-			this.panel.height = 32
+			// this.panel = new DPanel(this.dCont, 0, 0)
+			// this.panel.height = 32
 
-			this.panel.color = '#00ff00'
+			// this.panel.color = '#00ff00'
 
-			this._height = this.panel.height;
+			// this._height = this.panel.height;
 		};
 
 

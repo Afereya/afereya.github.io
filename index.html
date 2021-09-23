@@ -3,11 +3,13 @@
 <title>Afereya</title>	
 <!-- <link rel="shortcut icon" href="./favicon.ico"> -->
 <script src='./divLib.js'></script>
+<script src='./lib/pixi.min.js'></script>
+<script src='./lib/phaser.min.js'></script>
+
 <script type="module">
 	import { Main } from './src/Main.js';
 
 	window.trace = window.console.log.bind(window.console);
-
 	var dcmParam;
 
 
@@ -16,11 +18,11 @@
 		var w = document.documentElement.clientWidth;
 		var h = document.documentElement.clientHeight;
 
-		trace(main)
 		if (main != undefined) main.sizeWindow(w, h);		
 	}
 
 	function init () {
+		window.onresize = sizeWindow;
 		dcmParam = new DCM();	
 
 		main = new Main(function(s, p){

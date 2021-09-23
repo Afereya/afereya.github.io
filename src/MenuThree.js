@@ -6,10 +6,10 @@ import * as THREE from '../lib/three.module.js';
 // import { OrbitControls } from './jsm/controls/OrbitControls.js';
 
 
-export class MThree  {
+export class MenuThree  {
   	constructor(par, fun) {  		
   		var self=this;
-  		this.type="Main";
+  		this.type="MenuThree";
   		this.par=par;
   		this.fun=fun;
 

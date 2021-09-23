@@ -1,5 +1,6 @@
-import { MTop } from './MTop.js';
-import { MThree } from './MThree.js';
+import { MenuTop } from './MenuTop.js';
+import { MenuThree } from './MenuThree.js';
+import { GameAsteroid } from './game/GameAsteroid.js';
 
 export class Main  {
   	constructor(fun) {  		
@@ -15,19 +16,20 @@ export class Main  {
 		this.contentHTML.style.top = '0px';
 		this.contentHTML.style.left = '0px';
 		document.body.appendChild(this.contentHTML); 
-		
+
 		this.mTop = undefined;
   		this.init = function () {
-  			this.mTop = new MTop(this, function(){
+  			this.mTop = new MenuTop(this, function(){
   			})
-  			this.mThree = new MThree(this, function(){
+  			// this.mThree = new MenuThree(this, function(){
+  			// })
+  			 this.gAsteroid = new GameAsteroid(this, function(){
   			})
   			fun("init")
 		};
 
-		var w,h;		
+		var s, w, h;		
 		this.scale=1;
-		var s;
   		this.sizeWindow = function(_w, _h){  			
   			if(_w) {
   				w = _w;
@@ -40,11 +42,12 @@ export class Main  {
 			this.scale = s;
 			if(dcmParam.isIE==true)this.scale = 1;	
 
-			if(!this.mTop) return
+			if(this.mTop == undefined) return
 			this.mTop.sizeWindow(w, h, this.scale)
-			this.mThree.sizeWindow(w, h, this.scale)
+			this.gAsteroid.sizeWindow(w, h, this.scale)
 
-			this.mThree.y = this.mTop.height
+			// this.mThree.sizeWindow(w, h, this.scale)
+			// this.mThree.y = this.mTop.height
   		} 
 
   		this.init()
