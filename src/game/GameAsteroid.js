@@ -143,17 +143,17 @@ export class GameAsteroid  {
 			}, this)
 
 
-		    var debug = this.add.graphics();
-		    debug.lineStyle(1, 0x808080);
+		    var reticle = this.add.graphics();
+		    reticle.lineStyle(1, 0x808080);
 			this.input.on('pointermove', function (pointer) {
-		        debug.clear();
-				debug.beginPath();
-				debug.arc(pointer.worldX, pointer.worldY, 25, 0, 2 * Math.PI);
-				debug.moveTo(pointer.worldX+25, pointer.worldY);
-				debug.lineTo(pointer.worldX-25, pointer.worldY);
-				debug.moveTo(pointer.worldX, pointer.worldY+25);
-				debug.lineTo(pointer.worldX, pointer.worldY-25);
-				debug.stroke();
+		        reticle.clear();
+				reticle.beginPath();
+				reticle.arc(pointer.worldX, pointer.worldY, 25, 0, 2 * Math.PI);
+				reticle.moveTo(pointer.worldX+25, pointer.worldY);
+				reticle.lineTo(pointer.worldX-25, pointer.worldY);
+				reticle.moveTo(pointer.worldX, pointer.worldY+25);
+				reticle.lineTo(pointer.worldX, pointer.worldY-25);
+				reticle.stroke();
 		    }, this);
 
 			this.pace = 1000;
@@ -447,7 +447,6 @@ export default class Player {
 
             if (scene.controls.keys.space.isDown || sprite.autoFire) {
 				sprite.weapon.fireAtXY(scene.input.mousePointer.worldX, scene.input.mousePointer.worldY);
-
             }
 
 
@@ -459,7 +458,6 @@ export default class Player {
             }
 
             if ((scene.controls.keys.down.isDown || scene.controls.keys.s.isDown)) {
-                // sprite.setDrag(0.92);
                 sprite.setDrag(0.98);
                 scene.physics.velocityFromAngle(sprite.angle, -50, sprite.body.acceleration);
             }
