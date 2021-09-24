@@ -20,11 +20,12 @@ export class GameAsteroid  {
   		this._height = 600;
   		this._x = 0;
   		this._y = 0;
-		// this.dCont = new DCont(this.par.contentHTML); 
+  		this.offset = 5;
+		this.dCont = new DCont(this.par.contentHTML); 
 		// document.body.style.cursor = 'none';
 
 		const AMOUNT_OF_ASTROIDES = 10; 
-		const AMOUNT_OF_DECK = 2; 
+		// const AMOUNT_OF_DECK = 2; 
 
 		this.init = function(){
 			if(this.game != undefined) return
@@ -56,6 +57,14 @@ export class GameAsteroid  {
 			};
 
 			this.game = new Phaser.Game(config);
+			this.textBuff = new DLabel(this.dCont, this.offset, this.offset, ' ')
+			this.textBuff.width = this._width;
+			this.textBuff.activMouse = false;
+
+			this.textWarning = new DLabel(this.dCont, this.offset, this.offset+this.textBuff.fontSize, ' ')
+			this.textWarning.width = this._width;
+			this.textWarning.activMouse = false;
+			
 		}
 
 		var path = "../../resources/"
@@ -64,14 +73,22 @@ export class GameAsteroid  {
 		    this.load.image('star', path+'star2.png');
 		    this.load.image('bullet', path+'bullet.png');
 		    this.load.image('spaceship', path+'pngegg.png');
+		    this.load.image('buff1', path+'buff1.png');
+		    this.load.image('buff2', path+'buff2.png');
+		    this.load.image('buff3', path+'buff3.png');
 		    this.load.scenePlugin('WeaponPlugin', '../../lib/WeaponPlugin.js', null, 'weapons');
 		}
 
-
+	    var camArray = [];
+	    var cam1, cam2, cam3, cam4;
+	    var deathCollider, sheldCollider;
 	    function create() {
-			this.background = this.add.graphics();
-			this.background.fillRect(0, 0, this.scale.width, this.scale.height);
-			this.background.fillGradientStyle(0x161636, 0x161636, 0x292963, 0x292963);
+	    	// const gui = new dat.GUI();
+			this.cameras.main.setSize(this.scale.width, this.scale.height)
+			this.cameras.main.setBackgroundColor(0x292963);
+			camArray.push(cam1 = this.cameras.add(0, 0, this.scale.width, this.scale.height));
+	        camArray.push(cam2 = this.cameras.add(0, 0, this.scale.width, this.scale.height));
+	        camArray.push(cam3 = this.cameras.add(0, 0, this.scale.width, this.scale.height));
 
 			var star;
 			var bg = this.add.group();
@@ -100,21 +117,32 @@ export class GameAsteroid  {
 	        });
 	        this.controls.createWasdKeys();
 
+			this.buffs = this.physics.add.group();
+			this.arrayBuff = { 
+				'1': {name: 'Power shield'},
+				'2': {name: 'Homing missile'},
+				'3': {name: 'Btooom'}
+			};
+
 			this.players = this.physics.add.group();
 			this.asteroids = this.physics.add.group();
 
-			this.player = new Player(this, 320, 240);
+			this.player = new Player(self, this, Phaser.Math.Between(0, this.scale.width), Phaser.Math.Between(0, this.scale.height));
+			this.cameras.main.startFollow(this.player.sprite, true, 1, 1)
 			self.asteroidGenerator(this)
 
-			this.input.on("pointerdown", function(){
-				this.player.sprite.weapon.fireAtPointer();
-			},  this)
+
+			this.input.on("pointerdown", function(pointer){
+				// // this.player.sprite.weapon.fireAtPointer();
+				// this.player.sprite.weapon.fireAtXY(pointer.worldX, pointer.worldY);
+				castBuff(this, this.player.getBuff())
+			}, this)
+
 
 		    var debug = this.add.graphics();
 		    debug.lineStyle(1, 0x808080);
 			this.input.on('pointermove', function (pointer) {
 		        debug.clear();
-
 				debug.beginPath();
 				debug.arc(pointer.worldX, pointer.worldY, 25, 0, 2 * Math.PI);
 				debug.moveTo(pointer.worldX+25, pointer.worldY);
@@ -124,10 +152,18 @@ export class GameAsteroid  {
 				debug.stroke();
 		    }, this);
 
+			this.pace = 1000;
 			this.physics.add.collider(this.asteroids)
-			this.physics.add.collider(this.asteroids, this.players, death, null, this)
 			this.physics.add.collider(this.asteroids, this.player.sprite.weapon.bullets, oneShotOneKill, null, this);
+			deathCollider = this.physics.add.collider(this.asteroids, this.players, death, null, this);
+			deathCollider.active = true
+
+			sheldCollider = this.physics.add.overlap(this.asteroids, this.players, survive, null, this);
+			sheldCollider.active = false
+
+			this.physics.add.overlap(this.buffs, this.player.sprite, buffApply, null, this);
 		}
+
 
 		var dist
 		this.asteroidGenerator=function(par){
@@ -141,34 +177,46 @@ export class GameAsteroid  {
 						i --
 						continue
 					}
-					createAsteroid(x, y, Math.round(scale)/3, scale, par.asteroids);
+					createAsteroid(x, y, Math.round(scale)/3, scale, par);
 				}
         	}
 		}
 
+
 		var asteroid;
 	    function createAsteroid(x, y, scale, hp, par) {
-	        asteroid = par.create(x, y, 'asteroid').setOrigin(1, 1).setImmovable(false);
+	        asteroid = par.asteroids.create(x, y, 'asteroid').setOrigin(1, 1).setImmovable(false);
+	        asteroid.asteroid='asteroid';
 	        asteroid.setScale(scale);
 	        asteroid.setBounce(1,1);
 	        asteroid.setVelocity(Phaser.Math.Between(-25, 25), Phaser.Math.Between(-25, 25));
 	        asteroid.setMaxVelocity(50);
 	        asteroid.setCircle(50);	
-	        asteroid.setMass(1);
+	        asteroid.setInteractive()
+	        // asteroid.setMass(1);
 	        asteroid.hp=hp;
+
+	        par.add.tween({
+			  targets: asteroid,
+			  duration: 1000,
+			  alpha: {
+			  	    getStart: () => 0,
+    				getEnd: () => 1
+			  }
+			});
 	    }
 
 
-	    function death(player, asteroid) {
+	    function death() {
+			this.player.setBuff(null)
 			this.registry.destroy();
 			this.events.off();
 			this.scene.restart();
 	    }
 
+
 	    var num = 2;
 	    function oneShotOneKill(bullet, asteroid) {
-	    	trace(bullet, asteroid)
-
 	    	bullet.setActive(false).setVisible(false);
 	        bullet.body.enable = false;
 	        bullet.kill();
@@ -179,20 +227,118 @@ export class GameAsteroid  {
 
         	if(asteroid.hp > 0){
 	        	for (var i = 0; i < num; i++) {
-	        		createAsteroid(asteroid.x, asteroid.y, Math.round(asteroid.hp)/3, asteroid.hp, this.asteroids);
+	        		createAsteroid(asteroid.x, asteroid.y, Math.round(asteroid.hp)/3, asteroid.hp, this);
 	        	}
         	}
 
+			self.buffsRandom(this, asteroid.x, asteroid.y)
 			asteroid.destroy()
 			self.asteroidGenerator(this)
 	    }
 
 
+		var buff;
+	    this.buffsRandom = function(par, x, y){
+	    	let min = 0;
+	    	let max = Phaser.Math.Between(0, 3);
+			let type = 3//Math.floor(Math.random() * (max - min + 1)) + min;
+			if(type == 0) return;
+
+			buff = par.buffs.create(x, y, 'buff'+type).setOrigin(1, 1).setImmovable(false);
+	        buff.setScale(0.2);
+	        buff.setAlpha(0.9);
+	        buff.type=type;
+	    }
+
+	    var btoomRadius = 100;
+	    function buffApply(player, buff) {
+			buff.destroy();
+			this.player.setBuff(buff.type)
+	    }
+
+
+	    function castBuff(par, type) {
+	    	if(type === null) return;
+	    	if(par.pace < 1000) {
+	    		self.textWarning.value = 'Нельзя применять способности так часто!'
+	    		self.textWarning.visible = true;
+
+	    		par.add.tween({
+				  targets: self.textWarning,
+				  duration: 2500,
+				  alpha: {
+				  	    getStart: () => 10,
+	    				getEnd: () => 0
+				  }
+				});
+	    		return
+	    	} else {
+	    		self.textWarning.visible = false;
+	    	}
+	    	par.pace = 0;
+
+			if(type == 1) {
+				deathCollider.active = false;
+				sheldCollider.active = true;
+			}
+
+			if(type == 2) {
+		        par.input.on('gameobjectup', function (pointer, gameObject)
+		        {
+					par.player.sprite.weapon.fireAtSprite(gameObject);
+					par.input.off('gameobjectup')
+
+		        }, par);
+			}
+
+			if(type == 3){
+				var bodies = par.physics.overlapRect(par.player.sprite.x-(btoomRadius/2), par.player.sprite.y-(btoomRadius/2), par.player.sprite.x+(btoomRadius/2), par.player.sprite.y+(btoomRadius/2));
+
+				bodies.forEach(function (element) {
+					if(element.gameObject !== undefined && element.gameObject !== null){
+						if(element.gameObject.asteroid !== undefined) {
+	    					element.gameObject.setActive(false).setVisible(false);
+					        element.destroy()
+						}
+					}
+
+		        	setTimeout(function(){
+						self.asteroidGenerator(par)
+		        	}, 100);
+			    });
+			}
+
+			par.player.setBuff(null)
+	    }
+
+	    function survive() {
+        	setTimeout(function(){
+        		deathCollider.active = true;
+				sheldCollider.active = false;
+        	}, 1000);
+	    }
+
 	    function update() {
+	    	this.pace++;
 	        this.player.update();
     
 	        this.physics.world.wrap(this.player.sprite, 0);
+	        if(this.player.sprite.weapon.bullets.children)this.physics.world.wrap(this.player.sprite.weapon.bullets, 0);
 			if(this.asteroids.children)this.physics.world.wrap(this.asteroids, 0);
+
+        	cam1.scrollY = this.cameras.main.scrollY;
+			if(this.cameras.main.scrollX >= 0) cam1.scrollX = -this.scale.width+this.cameras.main.scrollX;
+			if(this.cameras.main.scrollX <= 0) cam1.scrollX = this.scale.width+this.cameras.main.scrollX;
+			if(this.cameras.main.scrollX == 0) cam1.visible = false;
+
+	        cam2.scrollX = this.cameras.main.scrollX;
+			if(this.cameras.main.scrollY >= 0) cam2.scrollY = -this.scale.height+this.cameras.main.scrollY;
+ 			if(this.cameras.main.scrollY <= 0) cam2.scrollY = this.scale.height+this.cameras.main.scrollY;
+			if(this.cameras.main.scrollY == 0) cam2.visible = false;
+
+			cam3.scrollX = cam1.scrollX
+			cam3.scrollY = cam2.scrollY
+			if(this.cameras.main.scrollX == 0 && this.cameras.main.scrollY == 0)cam3.visible = false;
 	    }
 
 
@@ -233,8 +379,9 @@ export class GameAsteroid  {
 
 
 export default class Player {
-    constructor(scene, x, y) {
+    constructor(par, scene, x, y) {
     	var self = this;
+        this.par = par;
         this.scene = scene;
 
         this.sprite = scene.players.create(x, y, "spaceship").setScale(0.6, 0.6).setOrigin(0.5, 0.5).setImmovable(true);
@@ -259,15 +406,26 @@ export default class Player {
 
         this.sprite.hitTween = scene.tweens.add({
             targets: this.sprite,
-            alpha: 0.2,
+            alpha: 0.3,
             duration: 100,
             yoyo: true,
             repeat: 5,
-            ease: 'Power1',
         });
 
+        this.buff = null;
+        this.setBuff = function(type){
+        	if(type === null) this.par.textBuff.value = ' '
+        	else this.par.textBuff.value = 'Active buff: ' + this.scene.arrayBuff[type+''].name;
+        	this.buff = type;
+        }
+
+        this.getBuff = function(){
+			return this.buff;
+        }
     }
 
+    create() {
+    }
 
     update() {
         let scene = this.scene;
@@ -284,7 +442,8 @@ export default class Player {
             }
 
             if (scene.controls.keys.space.isDown || sprite.autoFire) {
-                sprite.weapon.fire();
+				sprite.weapon.fireAtXY(scene.input.mousePointer.worldX, scene.input.mousePointer.worldY);
+
             }
 
 
