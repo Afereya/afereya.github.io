@@ -459,7 +459,9 @@ export default class Player {
             }
 
             if ((scene.controls.keys.down.isDown || scene.controls.keys.s.isDown)) {
-                sprite.setDrag(0.92);
+                // sprite.setDrag(0.92);
+                sprite.setDrag(0.98);
+                scene.physics.velocityFromAngle(sprite.angle, -50, sprite.body.acceleration);
             }
 
             if (scene.controls.keys.left.isDown || scene.controls.keys.a.isDown) {
