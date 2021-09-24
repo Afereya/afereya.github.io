@@ -241,7 +241,7 @@ export class GameAsteroid  {
 	    this.buffsRandom = function(par, x, y){
 	    	let min = 0;
 	    	let max = Phaser.Math.Between(0, 3);
-			let type = 3//Math.floor(Math.random() * (max - min + 1)) + min;
+			let type = Math.floor(Math.random() * (max - min + 1)) + min;
 			if(type == 0) return;
 
 			buff = par.buffs.create(x, y, 'buff'+type).setOrigin(1, 1).setImmovable(false);
