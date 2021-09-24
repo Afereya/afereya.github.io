@@ -131,11 +131,15 @@ export class GameAsteroid  {
 			this.cameras.main.startFollow(this.player.sprite, true, 1, 1)
 			self.asteroidGenerator(this)
 
-
+			this.input.mouse.disableContextMenu();
 			this.input.on("pointerdown", function(pointer){
 				// // this.player.sprite.weapon.fireAtPointer();
 				// this.player.sprite.weapon.fireAtXY(pointer.worldX, pointer.worldY);
-				castBuff(this, this.player.getBuff())
+				if (pointer.rightButtonDown()){
+					castBuff(this, this.player.getBuff())
+				} else {
+					this.player.sprite.weapon.fireAtXY(pointer.worldX, pointer.worldY);
+				}
 			}, this)
 
 
