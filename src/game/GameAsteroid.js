@@ -331,13 +331,13 @@ export class GameAsteroid  {
 			if(this.asteroids.children)this.physics.world.wrap(this.asteroids, 0);
 
         	cam1.scrollY = this.cameras.main.scrollY;
-			if(this.cameras.main.scrollX >= 0) cam1.scrollX = -this.scale.width+this.cameras.main.scrollX;
-			if(this.cameras.main.scrollX <= 0) cam1.scrollX = this.scale.width+this.cameras.main.scrollX;
+			if(this.cameras.main.scrollX > 0) cam1.scrollX = -this.scale.width+this.cameras.main.scrollX;
+			if(this.cameras.main.scrollX < 0) cam1.scrollX = this.scale.width+this.cameras.main.scrollX;
 			if(this.cameras.main.scrollX == 0) cam1.visible = false;
 
 	        cam2.scrollX = this.cameras.main.scrollX;
-			if(this.cameras.main.scrollY >= 0) cam2.scrollY = -this.scale.height+this.cameras.main.scrollY;
- 			if(this.cameras.main.scrollY <= 0) cam2.scrollY = this.scale.height+this.cameras.main.scrollY;
+			if(this.cameras.main.scrollY > 0) cam2.scrollY = -this.scale.height+this.cameras.main.scrollY;
+ 			if(this.cameras.main.scrollY < 0) cam2.scrollY = this.scale.height+this.cameras.main.scrollY;
 			if(this.cameras.main.scrollY == 0) cam2.visible = false;
 
 			cam3.scrollX = cam1.scrollX
