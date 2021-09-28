@@ -383,7 +383,7 @@ export class GameAsteroid  {
 			self._height=h;
   		} 
 
-  		// this.init()
+  		this.init()
   	}
 
     set x(value) {

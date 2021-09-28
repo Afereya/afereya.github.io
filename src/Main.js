@@ -24,15 +24,14 @@ export class Main  {
 		this.mTop = undefined;
 		this.arrayComponents = [];
   		this.init = function () {
-  			this.viewLink = new ViewLink(this, function(){
-  			})
+  			// this.viewLink = new ViewLink(this, function(){
+  			// })
 
   			this.mTop = new MenuTop(this, function(){
   			})
   			// this.mThree = new MenuThree(this, function(){
   			// })
   			this.arrayComponents.push(this.gAsteroid = new GameAsteroid(this, function(){ }))
-  			this.gAsteroid.init()
   			// this.arrayComponents.push(this.pHomescapes = new PlayableHomescapes(this, function(){ }))
 
   			fun("init")
