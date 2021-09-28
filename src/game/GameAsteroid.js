@@ -96,9 +96,9 @@ export class GameAsteroid  {
 	        camArray.push(cam2 = this.cameras.add(0, 0, this.scale.width, this.scale.height));
 	        camArray.push(cam3 = this.cameras.add(0, 0, this.scale.width, this.scale.height));
 
-			this.background = this.add.graphics();
-			this.background.fillRect(0, 0, this.scale.width, this.scale.height);
-			this.background.fillGradientStyle(0x161636, 0x161636, 0x292963, 0x292963);
+			// this.background = this.add.graphics();
+			// this.background.fillRect(0, 0, this.scale.width, this.scale.height);
+			// this.background.fillGradientStyle(0x161636, 0x161636, 0x292963, 0x292963);
 
 			var star;
 			var bg = this.add.group();
