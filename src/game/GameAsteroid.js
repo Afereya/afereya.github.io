@@ -12,7 +12,7 @@ import phaserControls from '../../lib/phaserControlsPlugin.min.js';
 export class GameAsteroid  {
   	constructor(par, fun) {  		
   		var self=this;
-  		this.type="MThree";
+  		this.type="GameAsteroid";
   		this.par=par;
   		this.fun=fun;
 
@@ -20,8 +20,14 @@ export class GameAsteroid  {
   		this._height = 600;
   		this._x = 0;
   		this._y = 0;
-  		this.offset = 5;
-		this.dCont = new DCont(this.par.contentHTML); 
+  		this._visible = null;
+
+  		this.offset = this.par.offset;
+		this.dCont = new DCont(this.par.dCont); 
+
+		// this.visible = true;
+		// this.visible = false;
+
 		// document.body.style.cursor = 'none';
 
 		const AMOUNT_OF_ASTROIDES = 10; 
@@ -31,7 +37,7 @@ export class GameAsteroid  {
 			if(this.game != undefined) return
 			var config = {
 			    type: Phaser.AUTO,
-			    parent: this.par.contentHTML,
+			    parent: this.dCont.div,
 			    scale: {
 			        mode: Phaser.Scale.RESIZE,
 			        width: '100%',
@@ -64,10 +70,10 @@ export class GameAsteroid  {
 			this.textWarning = new DLabel(this.dCont, this.offset, this.offset+this.textBuff.fontSize, ' ')
 			this.textWarning.width = this._width;
 			this.textWarning.activMouse = false;
-			
 		}
 
-		var path = "../../resources/"
+
+		var path = "../../resources/game/GameAsteroid/"
 	    function preload() {  
 		    this.load.image('asteroid', path+'asteroid2.png');
 		    this.load.image('star', path+'star2.png');
@@ -85,10 +91,14 @@ export class GameAsteroid  {
 	    function create() {
 	    	// const gui = new dat.GUI();
 			this.cameras.main.setSize(this.scale.width, this.scale.height)
-			this.cameras.main.setBackgroundColor(0x292963);
+			// this.cameras.main.setBackgroundColor(0x292963);
 			camArray.push(cam1 = this.cameras.add(0, 0, this.scale.width, this.scale.height));
 	        camArray.push(cam2 = this.cameras.add(0, 0, this.scale.width, this.scale.height));
 	        camArray.push(cam3 = this.cameras.add(0, 0, this.scale.width, this.scale.height));
+
+			this.background = this.add.graphics();
+			this.background.fillRect(0, 0, this.scale.width, this.scale.height);
+			this.background.fillGradientStyle(0x161636, 0x161636, 0x292963, 0x292963);
 
 			var star;
 			var bg = this.add.group();
@@ -138,6 +148,7 @@ export class GameAsteroid  {
 				if (pointer.rightButtonDown()){
 					castBuff(this, this.player.getBuff())
 				} else {
+					// trace(pointer.worldX, pointer.worldY)
 					this.player.sprite.weapon.fireAtXY(pointer.worldX, pointer.worldY);
 				}
 			}, this)
@@ -196,7 +207,7 @@ export class GameAsteroid  {
 	        asteroid.setVelocity(Phaser.Math.Between(-25, 25), Phaser.Math.Between(-25, 25));
 	        asteroid.setMaxVelocity(50);
 	        asteroid.setCircle(50);	
-	        asteroid.setInteractive()
+	        // asteroid.setInteractive()
 	        // asteroid.setMass(1);
 	        asteroid.hp=hp;
 
@@ -287,10 +298,12 @@ export class GameAsteroid  {
 			}
 
 			if(type == 2) {
+				asteroitInteractiveOn(par)
 		        par.input.on('gameobjectup', function (pointer, gameObject)
 		        {
 					par.player.sprite.weapon.fireAtSprite(gameObject);
 					par.input.off('gameobjectup')
+					asteroitInteractiveOff(par)
 
 		        }, par);
 			}
@@ -313,6 +326,23 @@ export class GameAsteroid  {
 			}
 
 			par.player.setBuff(null)
+	    }
+
+
+	    function asteroitInteractiveOn(par) {
+	    	let arr = par.asteroids.getChildren()
+	    	for (var i = arr.length - 1; i >= 0; i--) {
+	    		arr[i].setInteractive()
+	    	}
+	    }
+
+	    function asteroitInteractiveOff(par) {
+	    	let arr = par.asteroids.getChildren()
+	    	for (var i = arr.length - 1; i >= 0; i--) {
+	    		arr[i].disableInteractive()
+	    		
+	    		// arr[i].input.enable = false
+	    	}
 	    }
 
 	    function survive() {
@@ -358,7 +388,7 @@ export class GameAsteroid  {
 			self._height=h;
   		} 
 
-  		this.init()
+  		// this.init()
   	}
 
     set x(value) {
@@ -376,13 +406,25 @@ export class GameAsteroid  {
         }             
     }
     get y() { return this._y; }
+
+  	set visible(value) {
+        if (this._visible != value) {
+            this._visible = value; 
+
+            if(this._visible == true) {
+  				this.init()
+            	this.par.dCont.add(this.dCont)    
+            } else {
+            	if(this.dCont.parent!=undefined) this.dCont.parent.remove(this.dCont);
+            }
+        }             
+    }
+    get visible() { return this._visible; }
 }
 
 
 
-
-
-export default class Player {
+export class Player {
     constructor(par, scene, x, y) {
     	var self = this;
         this.par = par;
