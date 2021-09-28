@@ -91,7 +91,7 @@ export class GameAsteroid  {
 	    function create() {
 	    	// const gui = new dat.GUI();
 			this.cameras.main.setSize(this.scale.width, this.scale.height)
-			// this.cameras.main.setBackgroundColor(0x292963);
+			this.cameras.main.setBackgroundColor(0x292963);
 			camArray.push(cam1 = this.cameras.add(0, 0, this.scale.width, this.scale.height));
 	        camArray.push(cam2 = this.cameras.add(0, 0, this.scale.width, this.scale.height));
 	        camArray.push(cam3 = this.cameras.add(0, 0, this.scale.width, this.scale.height));
@@ -148,7 +148,6 @@ export class GameAsteroid  {
 				if (pointer.rightButtonDown()){
 					castBuff(this, this.player.getBuff())
 				} else {
-					// trace(pointer.worldX, pointer.worldY)
 					this.player.sprite.weapon.fireAtXY(pointer.worldX, pointer.worldY);
 				}
 			}, this)
@@ -207,8 +206,6 @@ export class GameAsteroid  {
 	        asteroid.setVelocity(Phaser.Math.Between(-25, 25), Phaser.Math.Between(-25, 25));
 	        asteroid.setMaxVelocity(50);
 	        asteroid.setCircle(50);	
-	        // asteroid.setInteractive()
-	        // asteroid.setMass(1);
 	        asteroid.hp=hp;
 
 	        par.add.tween({
@@ -340,8 +337,6 @@ export class GameAsteroid  {
 	    	let arr = par.asteroids.getChildren()
 	    	for (var i = arr.length - 1; i >= 0; i--) {
 	    		arr[i].disableInteractive()
-	    		
-	    		// arr[i].input.enable = false
 	    	}
 	    }
 
