@@ -4,7 +4,7 @@ export class MenuTop  {
   		this.type="MenuTop";
   		this.par=par;
   		this.fun=fun;
-		this.dCont = new DCont(this.par.contentHTML);
+		this.dCont = new DCont(this.par.dCont);
 
 		this._width = 0;
   		this._height = 0;

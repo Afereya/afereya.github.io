@@ -17,7 +17,10 @@ export class MenuThree  {
   		this._height = 0;
   		this._x = 0;
   		this._y = 0;
-		this.dCont = new DCont(this.par.contentHTML);
+        this._visible = false;
+        
+  		this.offset = this.par.offset;
+		this.dCont = new DCont();
 
 		let group;
 		let container, stats;
@@ -45,9 +48,6 @@ export class MenuThree  {
 
 		init();
 		animate();
-
-		
-
 
 		function init() {
 			container = self.dCont.div //document.getElementById( 'container' );
@@ -283,5 +283,18 @@ export class MenuThree  {
         }             
     }
     get y() { return this._y; }
+
+  	set visible(value) {
+        if (this._visible != value) {
+            this._visible = value;             
+
+            if(this._visible == true) {
+            	this.par.dCont.add(this.dCont)    
+            } else {
+            	if(this.dCont.parent!=undefined) this.dCont.parent.remove(this.dCont);
+            }
+        }             
+    }
+    get visible() { return this._visible; }
 }
 
