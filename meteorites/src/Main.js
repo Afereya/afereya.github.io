@@ -1,7 +1,6 @@
 import { MenuTop } from './MenuTop.js';
 import { MenuThree } from './MenuThree.js';
 import { GameAsteroid } from './game/GameAsteroid.js';
-import { PlayableHomescapes } from './game/PlayableHomescapes.js';
 
 export class Main  {
   	constructor(fun) {  		
