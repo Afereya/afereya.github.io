@@ -73,7 +73,7 @@ export class GameAsteroid  {
 		}
 
 
-		var path = "../../resources/game/GameAsteroid/"
+		var path = "../resources/game/GameAsteroid/"
 	    function preload() {  
 		    this.load.image('asteroid', path+'asteroid2.png');
 		    this.load.image('star', path+'star2.png');
